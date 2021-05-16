@@ -33,11 +33,26 @@
     </style>
 
     <script>
+
+var distance = 0;  
+               (function repeat() {
+                   distance = Math.floor((Math.random()*100)+1);
+                   setTimeout(repeat, 1000);
+                })();
         if (distance <=29){
             document.getElementById("parking1").style.backgroundColor='rgb(255, 127, 127)';
         }else{
             document.getElementById("parking1").style.backgroundColor='rgb(171, 231, 141)';
         }
+
+
+
+
+        $(document).ready(
+             function(){
+             setInterval(function() {
+             $('#inner');
+             }, 5000); });
     </script>
 </body>
 </html>

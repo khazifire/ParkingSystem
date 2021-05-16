@@ -1,16 +1,12 @@
 import usocket as socket
-from machine import Pin
 import network
-import esp
 import gc
 import dht
-
-# Create sensor DHT object
-d = dht.DHT11(Pin(32, Pin.IN))
+from random import randint
+from time import sleep
 
 ssid = 'Kazimoto'
 password = '$Yealink$'
-
 station = network.WLAN(network.STA_IF)
 station.active(True)
 station.connect(ssid, password)
@@ -19,7 +15,7 @@ while station.isconnected() == False:
     pass
 print('Connection successfully')
 print(station.ifconfig())
-led = Pin(2, Pin.OUT)
+
 
 def web_page(distance):
     html = """
@@ -28,6 +24,7 @@ def web_page(distance):
         <head>
             <meta charset="UTF-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta http-equiv="refresh" content="5">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Simple Parking System</title>
         </head>
@@ -39,11 +36,11 @@ def web_page(distance):
                     <div id="parking1">1</div>
                     <div id="parking2">2 </div>
                     <div id="parking3">3 </div>
+                    <p>""" + str(distance) + """ </p>
                 </div>
             </div>
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;500;700&display=swap');
-                
                 body{display: grid; font-family: 'Vollkorn', serif;background-color: #131313;}
                 * {padding: 0;margin: 0;box-sizing: border-box;text-decoration: none;}
                 h1{padding-top: 5%;}
@@ -55,14 +52,10 @@ def web_page(distance):
                 #parking3{background-color: rgb(255, 127, 127);}
             </style>
              <script>
-               var distance = 0;  
-               (function repeat() {
-                   distance = Math.floor((Math.random()*100)+1);
-                   setTimeout(repeat, 1000);
-                })();
+                distance = """ + str(distance) + """
                 if ( distance  <=29){document.getElementById("parking1").style.backgroundColor='rgb(255, 127, 127)';
                 }else{document.getElementById("parking1").style.backgroundColor='rgb(171, 231, 141)';}
-                console.log(distance) 
+                console.log(distance)
             </script>
         </body>
     </html>"""
@@ -71,15 +64,21 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('', 80))
 s.listen(5)
 
+distance = randint(20,60)
 while True:
     conn, addr = s.accept()
     print(' Got a connection from {}'.format(str(addr)))
     request = conn.recv(1024)
     request = str(request)
     print('Content = {}'.format(request))
-  
-    distance= 30
-    response = web_page(distance)
+
+    print(distance)
+    d = randint(-10,1)
+    distance = distance + d
+    sleep(0.2)
+    
+
+    response = web_page(str(distance))
     
     conn.send('HTTP/1.1 200 OK\n')
     conn.send('Content-Type: text/html\n')
@@ -87,3 +86,4 @@ while True:
     conn.sendall(response)
     conn.close()
         
+

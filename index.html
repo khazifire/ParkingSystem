@@ -6,6 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="refresh" content="1">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Parking System</title>
 </head>
@@ -14,8 +16,8 @@
         <h1>Smart Parking System</h1>
         <p><strong>Available Parking Spot:</strong>  1 <br><strong>Total Parking Spot:</strong> 3</p>
         <div class="inner">
-            <div class="parking1">1</div>
-            <div class="parking2">2 </div>
+            <div class="parking1">1 <img src="https://www.pngfind.com/pngs/m/74-749644_black-car-topview-vector-transparent-library-top-view.png" alt=""></div>
+            <div class="parking2">2</div>
             <div class="parking3">3 </div>
         </div>
     </div>
@@ -30,6 +32,7 @@
         #parking1{ background-color: rgb(171, 231, 141);}
         #parking2{background-color: rgb(255, 127, 127);}
         #parking3{background-color: rgb(255, 127, 127);}
+        img{height: 90%;}
     </style>
 
     <script>
@@ -40,7 +43,7 @@ var distance = 0;
                    setTimeout(repeat, 1000);
                 })();
         if (distance <=29){
-            document.getElementById("parking1").style.backgroundColor='rgb(255, 127, 127)';
+            document.getElementById("parking1").style.cssText= "background-color:rgb(255, 127, 127); visibility:visible";
         }else{
             document.getElementById("parking1").style.backgroundColor='rgb(171, 231, 141)';
         }
@@ -48,11 +51,11 @@ var distance = 0;
 
 
 
-        $(document).ready(
+       /*  $(document).ready(
              function(){
              setInterval(function() {
              $('#inner');
-             }, 5000); });
+             }, 5000); }); */
     </script>
 </body>
 </html>

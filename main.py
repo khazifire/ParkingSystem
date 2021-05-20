@@ -24,14 +24,15 @@ def web_page(distance1,distance2,distance3,counter):
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta http-equiv="refresh" content="5">
+        
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Simple Parking System</title>
     </head>
     <body>
         <div id="container">
             <h1>Smart Parking System</h1>
-            <p><strong>Available Parking Spot:</strong>"""+str(counter)+"""<br><strong>Total Parking Spot:</strong> 3</p>
+            <p>Available Spot: <strong>"""+(counter)+"""</strong></p>
+            <p>Total Spot: 3</p>
             <div class="inner" id="inb">
                 <div id="parking1"><img id="car1" src="https://github.com/dankazim/ParkingSystem/blob/main/car.png?raw=true" alt=""></div>
                 <div id="parking2"><img id="car2" src="https://github.com/dankazim/ParkingSystem/blob/main/car.png?raw=true" alt=""></div>
@@ -51,32 +52,33 @@ def web_page(distance1,distance2,distance3,counter):
             #parking2{background-color: var(--green);}
             #parking3{background-color: var(--green);}
             img{ height:90%;}
+            p strong {background-color: var(--green);padding: 2px 7px 2px 7px;border-radius: 50%;color: rgb(0, 0, 0);
         </style>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"> </script>
-        
         <script>
-            distance1 = """ + str(distance1) + """
-            distance2 = """ + str(distance2) + """
-            distance3 = """ + str(distance3) + """
-            
+                distance1 = """ + str(distance1) + """
+                distance2 = """ + str(distance2) + """
+                distance3 = """ + str(distance3) + """
+                
+                if ( distance1  <=29){
+                document.getElementById("parking1").style.backgroundColor='rgb(255, 127, 127)';
+                document.getElementById("car1").style.visibility = "visible";
+                }else{document.getElementById("parking1").style.backgroundColor='rgb(171, 231, 141)';
+                document.getElementById("car1").style.visibility = "hidden";}
+                
+                if ( distance2  <=29){
+                document.getElementById("parking2").style.backgroundColor='rgb(255, 127, 127)';
+                document.getElementById("car2").style.visibility = "visible";
+                }else{document.getElementById("parking2").style.backgroundColor='rgb(171, 231, 141)';
+                document.getElementById("car2").style.visibility = "hidden";}
 
-            if ( distance1  <=29){
-            document.getElementById("parking1").style.backgroundColor='rgb(255, 127, 127)';
-            document.getElementById("car1").style.visibility = "visible";
-            }else{document.getElementById("parking1").style.backgroundColor='rgb(171, 231, 141)';
-            document.getElementById("car1").style.visibility = "hidden";}
-            
-            if ( distance2  <=29){
-            document.getElementById("parking2").style.backgroundColor='rgb(255, 127, 127)';
-            document.getElementById("car2").style.visibility = "visible";
-            }else{document.getElementById("parking2").style.backgroundColor='rgb(171, 231, 141)';
-            document.getElementById("car2").style.visibility = "hidden";}
-
-            if ( distance2  <=29){
-            document.getElementById("parking3").style.backgroundColor='rgb(255, 127, 127)';
-            document.getElementById("car3").style.visibility = "visible";
-            }else{document.getElementById("parking3").style.backgroundColor='rgb(171, 231, 141)';
-            document.getElementById("car3").style.visibility = "hidden";}
+                if ( distance3  <=29){
+                document.getElementById("parking3").style.backgroundColor='rgb(255, 127, 127)';
+                document.getElementById("car3").style.visibility = "visible";
+                }else{document.getElementById("parking3").style.backgroundColor='rgb(171, 231, 141)';
+                document.getElementById("car3").style.visibility = "hidden";}
+                
+                setInterval(()=>{location.reload(); }, 3000)
         </script>
     </body>
     </html>"""
@@ -84,7 +86,6 @@ def web_page(distance1,distance2,distance3,counter):
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('', 80))
 s.listen(5)
-
 
 counter = 0
 while True:
@@ -96,28 +97,20 @@ while True:
     distance1 = randint(25,35)
     distance2 = randint(28,40)
     distance3 = randint(23,35)
-    print(distance1,distance3,distance3)
-#
+    print(distance1,distance2,distance3)
 
-    if (distance1 >29 and distance2 >29) and distance3 >29:
+    if (distance1 >=30 and distance2 >=30) and distance3 >=30:
         counter =3
-    elif (distance1 >29 and distance3 >29):
-        couner =2
-    elif (distance2 >29  and distance3 >29):  
+    elif (distance1 >=30 and distance3 >=30) or (distance2 >=30  and distance3 >=30)or(distance1 >=30 and distance2 >=30):
         counter =2
-    elif (distance1 >29 and distance2 >29):
-        counter =2
-    elif distance1 >29  or distance2 >29  or distance3 >29 :
+    elif distance1 >=30  or distance2 >=30  or distance3 >=30 :
         counter =1
     else:
         counter = 0
     
     sleep(0.2)
     
-    
-
     response = web_page(str(distance1),str(distance2),str(distance3),str(counter))
-    
     conn.send('HTTP/1.1 200 OK\n')
     conn.send('Content-Type: text/html\n')
     conn.send('Connection: close\n\n')
